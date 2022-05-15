@@ -1,1 +1,1 @@
-# email-p2p-python
+# Um email/chat p2p dos leigos 
