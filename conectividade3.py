@@ -15,8 +15,8 @@ class Conectividade(threading.Thread):
     """
 
     def __init__(self, host_ip, host_port):
-        self.requesting_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.awaiting_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         self.connection = ''
         self.host_ip = host_ip
         self.host_port = host_port
@@ -24,7 +24,7 @@ class Conectividade(threading.Thread):
     def solicitar_conexao(self, peer_ip, peer_port):
         while True:
             try:
-                self.requesting_socket.connect((peer_ip, peer_port))
+                self.socket.connect((peer_ip, peer_port))
             except socket.error as e:
                 print("Ainda não conectou")
                 continue
@@ -32,11 +32,13 @@ class Conectividade(threading.Thread):
             break
 
     def aguardar_conexao(self, host_ip, host_port):
-            self.awaiting_socket.bind((host_ip, host_port))
-            self.awaiting_socket.listen()
+        self.socket.bind((host_ip, host_port))
+        self.socket.listen()
 
-            self.connection, addr = self.awaiting_socket.accept()
-            print(f"rolou {self.connection}")
+        self.connection, addr = self.socket.accept()
+
+        print(f"rolou {self.connection}")
+
 
     def enviar_mensagem(self):
         pass
@@ -45,11 +47,12 @@ class Conectividade(threading.Thread):
         pass
 
     def run(self):
-        t_solicitar_conexao = threading.Thread(target=self.solicitar_conexao, args=('127.0.0.1', 55432))
-        t_aguardar_conexao = threading.Thread(target=self.aguardar_conexao, args=('127.0.0.1', 55555))
+        t_solicitar_conexao = threading.Thread(target=self.solicitar_conexao, args=('127.0.0.1', 55555))
+        t_aguardar_conexao = threading.Thread(target=self.aguardar_conexao, args=('127.0.0.1', 55432))
 
         t_solicitar_conexao.start()
         t_aguardar_conexao.start()
+
 if __name__ == '__main__':
-    connect = Conectividade('127.0.0.1', 55555)
+    connect = Conectividade('127.0.0.1', 55432)
     connect.run()

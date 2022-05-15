@@ -32,11 +32,12 @@ class Conectividade(threading.Thread):
             break
 
     def aguardar_conexao(self, host_ip, host_port):
-            self.awaiting_socket.bind((host_ip, host_port))
-            self.awaiting_socket.listen()
+        self.awaiting_socket.bind((host_ip, host_port))
+        self.awaiting_socket.listen()
 
-            self.connection, addr = self.awaiting_socket.accept()
-            print(f"rolou {self.connection}")
+        self.connection, addr = self.awaiting_socket.accept()
+        print(f"rolou {self.connection}")
+
 
     def enviar_mensagem(self):
         pass
@@ -45,11 +46,12 @@ class Conectividade(threading.Thread):
         pass
 
     def run(self):
-        t_solicitar_conexao = threading.Thread(target=self.solicitar_conexao, args=('127.0.0.1', 55432))
-        t_aguardar_conexao = threading.Thread(target=self.aguardar_conexao, args=('127.0.0.1', 55555))
+        t_solicitar_conexao = threading.Thread(target=self.solicitar_conexao, args=('127.0.0.1', 55551))
+        t_aguardar_conexao = threading.Thread(target=self.aguardar_conexao, args=('127.0.0.1', 55432))
 
         t_solicitar_conexao.start()
         t_aguardar_conexao.start()
+
 if __name__ == '__main__':
-    connect = Conectividade('127.0.0.1', 55555)
+    connect = Conectividade('127.0.0.1', 55432)
     connect.run()
